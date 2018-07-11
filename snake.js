@@ -1,77 +1,111 @@
 window.onload = function(){
 
+      var snake = [
+          {x: 10, y: 10},
+          {x: 20, y: 10},
+          {x: 30, y: 10},
+          {x: 40, y: 10}
+      ]
 
-  const UP = 38;
-  const DOWN = 40;
-  const LEFT = 37;
-  const RIGHT = 39;
+      var canvas = document.getElementById('canvas');
+      var width_ = canvas.clientWidth;
+      var height_ = canvas.clientWidth;
+      var ctx = canvas.getContext("2d");
+      
+      setInterval(function(){
+      
+      ctx.clearRect(0, 0, width_, height_);
+      document.onkeydown = (e) => {
+            if ([38,39,40,37].indexOf(e.keyCode) >= 0) e.preventDefault();
+            switch(e.keyCode){
+                case 37:
+                  direct = "left";
+                  break;
+                case 38:
+                  direct = "up";
+                  break;
+                case 39:
+                  direct = "right";
+                  break;
+                case 40:
+                  direct = "down";
+                  break;
+            }
 
-  var snake = [{x: 10, y: 10}]
+      }
+      drawSnake();
+      drawFood();
 
-  var canvas = document.getElementById('canvas');
-  var width_ = canvas.clientWidth;
-  var height_ = canvas.clientWidth;
-  var ctx = canvas.getContext("2d");
+  }, 10)
   
-  var food = {
 
-    x: parseInt(Math.random() * width_),
-    y: parseInt(Math.random() * height_)
+  function drawSnake(){
+      ctx.fillStyle = "red";
 
-  };
-  
-  document.onkeypress  = function(event){
-    var code = event.keyCode;
-    ctx.clearRect(0, 0, width_, height_);
-    drawSnake(code);
-    drawFood(food);
-
-  };
-
-  function drawSnake(ev){
-      ctx.fillStyle = "#BBBBBB";
-      what_cycle_to_choose(ev);
+      updatePos();
       snake.forEach(function(item){
+      
         ctx.fillRect(item.x, item.y, 10, 10);
-        if(snake[0].x == food.x && snake[0].y == food.y){
-          food.x = parseInt(Math.random() * width_);
-          food.y = parseInt(Math.random() * height_);
+        if(item.x == food.x && item.y == food.y){
+            food.x = parseInt(Math.random() * width_);
+            food.y = parseInt(Math.random() * height_)
+            addToSnake()
         }
       })
-  };
-
-
-
-  function what_cycle_to_choose(direct){
-    snake.forEach(function(item){
-      console.log(`I AM FROM ${direct}`)
-      switch(direct){
-        case 40:
-          item.y+=1;
-          break;
-        case 38:
-          item.y-=1;
-          break;
-        case 37:
-          item.x-=1;
-          break;
-        case 39:
-          item.x+=1;
-        default:
-          console.log(`Tails coords -> ${snake[0].y}, ${snake[0].x}`);
+  }
+ 
+  function addToSnake(){
+      var last_index = snake.length - 1; 
+      var new_one = {
+        x: snake[last_index].x,
+        y: snake[last_index].y
       }
-    });
-      
-      
-  };
+      var x_diff = snake[last_index].x - snake[last_index - 1].x;
+      var y_diff =  snake[last_index].y - snake[last_index - 1].y;
 
-  function drawFood(coord){
-    ctx.fillStyle = '#FF0000';
-    ctx.fillRect(coord.x, coord.y, 10, 10)
-    return {
-      x: parseInt(coord.x),
-      y: parseInt(coord.y)
+      if(x_diff > 0){
+          new_one.x += 50;
+      } else if(x_diff < 0){
+        new_one.x -= 50;
+      } else if(y_diff > 0){
+        new_one.y += 50;
+      } else if(y_diff < 0){
+        new_one.y -= 100;
+      }
+
+      snake.push(new_one);
+  }
+
+  function updatePos(){
+    var snakeEl = {
+      x: snake[0].x,
+      y: snake[0].y
     }
 
+    if(direct == "up"){
+        snakeEl.y -= 1;
+    } else if(direct == "down"){
+        snakeEl.y += 1;
+    } else if(direct == "left"){
+        snakeEl.x -= 1;
+    } else if(direct == "right"){
+        snakeEl.x += 1;
+    }
+
+    snake.pop();
+    snake.unshift(snakeEl);
+
   }
+
+  function drawFood(){
+      ctx.fillStyle = "blue"
+      ctx.fillRect(food.x, food.y, 10, 10)
+
+  }
+  var food = {
+              x: parseInt(Math.random() * width_),
+              y: parseInt(Math.random() * height_)
+      };
+  var direct = "right"
+
 };
