@@ -6,78 +6,67 @@ window.onload = function(){
   const LEFT = 37;
   const RIGHT = 39;
 
-  var snake = [
-                [5, 10],
-                [15, 10]
-              ]
-  
+  var snake = [{x: 10, y: 10}]
+
   var canvas = document.getElementById('canvas');
   var width_ = canvas.clientWidth;
   var height_ = canvas.clientWidth;
   var ctx = canvas.getContext("2d");
   
+  var food = {
 
-setInterval(function(){
-  document.onkeypress = function(event){
-  drawSnake(event.keyCode);
+    x: parseInt(Math.random() * width_),
+    y: parseInt(Math.random() * height_)
 
- }
-}, 60)
-
+  };
   
-  function getFoodPos(){
-    var rand_x = Math.random() * width_;
-    var rand_y = Math.random() * height_ ;
-    return {
-      x: parseInt(rand_x),
-      y: parseInt(rand_y)
-    }
-  }
+  document.onkeypress  = function(event){
+    var code = event.keyCode;
+    ctx.clearRect(0, 0, width_, height_);
+    drawSnake(code);
+    drawFood(food);
 
+  };
 
   function drawSnake(ev){
       ctx.fillStyle = "#BBBBBB";
-      snake.forEach(function(element, index, array){
-          ctx.clearRect(0, 0, width_, height_)
-          ctx.fillRect(element[0], element[1], 10, 10);
-
-      });
-     
       what_cycle_to_choose(ev);
-      var head = snake.slice(0,1)
-      snake.unshift(head);
+      snake.forEach(function(item){
+        ctx.fillRect(item.x, item.y, 10, 10);
+        if(snake[0].x == food.x && snake[0].y == food.y){
+          food.x = parseInt(Math.random() * width_);
+          food.y = parseInt(Math.random() * height_);
+        }
+      })
+  };
 
-  }
 
 
   function what_cycle_to_choose(direct){
-    switch (direct) {
-      case UP:
-        snake.forEach(function(item, index, array){
-          item[1] -= 5;
-        });
-        break;
-      case DOWN:
-        snake.forEach(function(item, index, array){
-          item[1] += 5;
-        });
-        break;
-      case LEFT:
-        snake.forEach(function(item, index, array){
-          item[0] -= 5;
-        });
-        break;
-      case RIGHT:
-        snake.forEach(function(item, index, array){
-          item[0] += 5;
-        });
-        break;
-    }
-  } 
+    snake.forEach(function(item){
+      console.log(`I AM FROM ${direct}`)
+      switch(direct){
+        case 40:
+          item.y+=1;
+          break;
+        case 38:
+          item.y-=1;
+          break;
+        case 37:
+          item.x-=1;
+          break;
+        case 39:
+          item.x+=1;
+        default:
+          console.log(`Tails coords -> ${snake[0].y}, ${snake[0].x}`);
+      }
+    });
+      
+      
+  };
 
   function drawFood(coord){
     ctx.fillStyle = '#FF0000';
-    ctx.clearRect(0, 0, width_, height_);
     ctx.fillRect(coord.x, coord.y, 10, 10)
     return {
       x: parseInt(coord.x),
