@@ -1,42 +1,56 @@
 window.onload = function(){
 
-      var snake = [
-          {x: 10, y: 10},
-          {x: 50, y: 10},
-      ]
+  var snake = [{x: 10, y: 10}, {x: 20, y: 10}]
 
-      var canvas = document.getElementById('canvas');
-      var width_ = canvas.clientWidth;
-      var height_ = canvas.clientWidth;
-      var ctx = canvas.getContext("2d");
+  var score = 0;
+  var snake_length = 1;
+  var canvas = document.getElementById('canvas');
+  var width_ = canvas.clientWidth;
+  var height_ = canvas.clientWidth;
+  var ctx = canvas.getContext("2d");
       
-      var ID = setInterval(function(){
+  var interval = setInterval(function(){
       
-      ctx.clearRect(0, 0, width_, height_);
-            chooseDirection();
-            drawSnake(ID);
-            drawFood();
-
-  }, 10)
+        ctx.clearRect(0, 0, width_, height_);
+        chooseDirection();
+        checkBorders();
+        checkBodyCollissions();
+        drawFood();
+        drawSnake();}, 10);
   
-
   function drawSnake(id){
-      ctx.fillStyle = "red";
       updatePos();
-      ctx.fillRect(snake[0].x, snake[0].y, 11,11);
+      ctx.fillStyle = "black";
+      draw_circle(snake[0].x, snake[0].y);
       for(var i = 1; i < snake.length; i++){
-          ctx.fillStyle = "rgba(16,128,64,8)";
           chaeckIfFoodEaten();
-          if(checkBorders()) clearInterval(id);
-          ctx.fillRect(snake[i].x, snake[i].y, 10, 10);
-          
-
-      }
-
-  }
+          ctx.fillStyle = "rgb(155,155,155)";
+          draw_circle(snake[i].x, snake[i].y);         
+      }}
  
-function chooseDirection(){
+  function checkBodyCollissions(){
+    for(var i = 1; i < snake.length; i++){
+        if(snake[0].x == snake[i].x && snake[0].y == snake[i].y){
 
+            alert("You eat yourself, no, God!");
+            createInfoDiv();
+            clearInterval(interval);
+            setTimeout(function(){window.location.reload()}, 1000)
+
+        }
+    }    }
+
+  function createInfoDiv(){
+        var div = document.createElement('div');
+        div.innerText = "Don't forget to click on screen after page reloads to continue...";
+        document.body.appendChild(div);}
+
+  function draw_circle(x_coord, y_coord) {
+          ctx.beginPath();
+          ctx.arc(x_coord, y_coord, 7, 0, 2 * Math.PI);
+          ctx.fill();}
+
+  function chooseDirection(){
   document.onkeydown = (e) => {
                   if ([38,39,40,37].indexOf(e.keyCode) >= 0) e.preventDefault();
                   switch(e.keyCode){
@@ -58,25 +72,31 @@ function chooseDirection(){
                         break;
                   }
 
-            }
-
-}
+            }}
 
   function chaeckIfFoodEaten(){
-    if(Math.abs(snake[0].x - food.x) < 7 && Math.abs(snake[0].y - food.y) < 7){
+    if(Math.abs(snake[0].x - food.x) < 8 && Math.abs(snake[0].y - food.y) < 8){
             food.x = parseInt(Math.random() * width_);
             food.y = parseInt(Math.random() * height_);
+            score += 25;
+            snake_length+=1;
+            document.getElementById('score').innerText = `score: ${score}`;
+            document.getElementById('length').innerText = `snake length: ${snake_length}`;
             addToSnake()
-        }
-  }
+        }}
 
   function checkBorders(){
 
       if(snake[0].x == width_ || snake[0].y == height_ || snake[0].x == 0 || snake[0].y == 0){
-        alert("Border!")
-      }
-              
-  }
+        
+       
+        alert("We're sorry, but You are dead! Watch the phrase after 'snake length'");
+        clearInterval(interval);
+        score = 0;
+        createInfoDiv();
+        setTimeout(function(){ window.location.reload() }, 2000);
+
+      }}
 
   function addToSnake(){
       var last_index = snake.length - 1; 
@@ -108,11 +128,7 @@ function chooseDirection(){
       snake.push(new_one);
       snake.push(new_one);
       snake.push(new_one);
-      snake.push(new_one);
-    
-      
-
-  }
+      snake.push(new_one);}
 
   function updatePos(){
     var snakeEl = {
@@ -131,20 +147,19 @@ function chooseDirection(){
     }
 
     snake.pop();
-    snake.unshift(snakeEl);
-
-  }
+    snake.unshift(snakeEl);}
 
   function drawFood(){
-      ctx.fillStyle = "blue"
+      ctx.fillStyle = "rgba(5, 233, 24, 0.8)";
+      draw_circle(food.x, food.y)}
 
-      ctx.fillRect(food.x, food.y, 10, 10)
-
-  }
+  function updateFoodCoords(){
+      food.x = parseInt(Math.random() * width_);
+      food.y = prseInt(Math.random() * height_);}
+  
   var food = {
               x: parseInt(Math.random() * width_) ,
-              y: parseInt(Math.random() * height_) 
-      };
-  var direct = "right"
+              y: parseInt(Math.random() * height_)};
 
+  var direct = "right"
 };
