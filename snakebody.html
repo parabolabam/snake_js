@@ -4,17 +4,22 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<link rel="stylesheet" href="style.css">
+	<script src="./js/Chart.js"></script>	
 </head>
 <body>
-	<canvas id = "canvas" width="500" height="500"></canvas>
+	<div id = "writeAttr1" data = "" style="width: 500px; height: 500px;">
+		<canvas id = "canvas" width="500" height="500"></canvas>
+	</div>
 	<div id = "score">
 		score: 0 	
 	</div>
 	<div id = "length">
-			snake length: 1<br>
-		</div>
+		snake length: 1<br>
+	</div>
+	<div style="width: 500px; height: 500px; justify-content: center;">
+		<canvas id = "canvas1" width="400" height="400"></canvas>
+	</div>
 </body>
-<script type="text/javascript" src="snake.js">
-	
-</script>
+<script src="./js/snake.js"></script>
+<script src="./js/snakestats.js"></script>	
 </html>

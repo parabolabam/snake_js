@@ -34,6 +34,7 @@
             alert("You eat yourself, no, God!");
             createInfoDiv();
             clearInterval(interval);
+            score = 0;
             setTimeout(function(){window.location.reload()}, 1000)
 
         }
