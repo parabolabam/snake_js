@@ -1,14 +1,14 @@
 
-  var snake = [{x: 10, y: 10}, {x: 20, y: 10}]
+  let snake = [{x: 10, y: 10}, {x: 20, y: 10}]
 
-  var score = 0;
-  var snake_length = 1;
-  var canvas = document.getElementById('canvas');
-  var width_ = canvas.clientWidth;
-  var height_ = canvas.clientWidth;
-  var ctx = canvas.getContext("2d");
+  let score = 0;
+  let snake_length = 1;
+  let canvas = document.getElementById('canvas');
+  let width_ = canvas.clientWidth;
+  let height_ = canvas.clientWidth;
+  let ctx = canvas.getContext("2d");
       
-  var interval = setInterval(function(){
+  let interval = setInterval(function(){
       
         ctx.clearRect(0, 0, width_, height_);
         chooseDirection();
@@ -21,14 +21,14 @@
       updatePos();
       ctx.fillStyle = "black";
       draw_circle(snake[0].x, snake[0].y);
-      for(var i = 1; i < snake.length; i++){
+      for(let i = 1; i < snake.length; i++){
           chaeckIfFoodEaten();
           ctx.fillStyle = "rgb(155,155,155)";
           draw_circle(snake[i].x, snake[i].y);         
       }}
  
   function checkBodyCollissions(){
-    for(var i = 1; i < snake.length; i++){
+    for(let i = 1; i < snake.length; i++){
         if(snake[0].x == snake[i].x && snake[0].y == snake[i].y){
 
             alert("You eat yourself, no, God!");
@@ -40,7 +40,7 @@
     }    }
 
   function createInfoDiv(){
-        var div = document.createElement('div');
+        let div = document.createElement('div');
         div.innerText = "Don't forget to click on screen after page reloads to continue...";
         document.body.appendChild(div);}
 
@@ -98,13 +98,13 @@
       }}
 
   function addToSnake(){
-      var last_index = snake.length - 1; 
-      var new_one = {
+      let last_index = snake.length - 1; 
+      let new_one = {
         x: snake[last_index].x,
         y: snake[last_index].y
       }
-      var x_diff = snake[last_index].x - snake[last_index - 1].x;
-      var y_diff =  snake[last_index].y - snake[last_index - 1].y;
+      let x_diff = snake[last_index].x - snake[last_index - 1].x;
+      let y_diff =  snake[last_index].y - snake[last_index - 1].y;
 
       if(x_diff > 0){
           new_one.x += 1;
@@ -130,7 +130,7 @@
       snake.push(new_one);}
 
   function updatePos(){
-    var snakeEl = {
+    let snakeEl = {
       x: snake[0].x,
       y: snake[0].y
     }
@@ -156,9 +156,9 @@
       food.x = parseInt(Math.random() * width_);
       food.y = prseInt(Math.random() * height_);}
   
-  var food = {
+  let food = {
               x: parseInt(Math.random() * width_) ,
               y: parseInt(Math.random() * height_)};
 
-  var direct = "right"
+  let direct = "right"
 
